@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+
+<div class="auth-container" style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 50px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="auth-card" style="background-color: rgba(30, 30, 30, 0.95); padding: 40px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); border: 1px solid #333;">
+                    <div class="text-center mb-4">
+                        <h1 style="color: #E50914; font-size: 50px; font-weight: 700;"><i class="fas fa-play-circle"></i></h1>
+                        <h2 class="mb-1" style="color: white; font-size: 2rem; font-weight: 600;">Create Account</h2>
+                        <p style="color: #e0e0e0; font-size: 1rem;">Join BlogFlix and start your blogging journey!</p>
+                    </div>
+                    
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger" style="background-color: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #f8d7da;">
+                            <i class="fas fa-exclamation-circle me-2"></i><%= error %>
+                        </div>
+                    <% } %>
+
+                    <form action="/register" method="POST">
+                        <div class="mb-4">
+                            <label for="username" class="form-label" style="color: white; font-weight: 500;">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #333; border: 1px solid #444; color: #999;"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required style="background-color: #333; border: 1px solid #444; color: white;">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="email" class="form-label" style="color: white; font-weight: 500;">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #333; border: 1px solid #444; color: #999;"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required style="background-color: #333; border: 1px solid #444; color: white;">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="password" class="form-label" style="color: white; font-weight: 500;">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #333; border: 1px solid #444; color: #999;"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a password (min 6 characters)" required minlength="6" style="background-color: #333; border: 1px solid #444; color: white;">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="role" class="form-label" style="color: white; font-weight: 500;">Account Type</label>
+                            <select class="form-select" id="role" name="role" style="background-color: #333; border: 1px solid #444; color: white;">
+                                <option value="user">Regular User</option>
+                                <option value="admin">Admin (Demo)</option>
+                            </select>
+                            <small style="color: #e0e0e0;">Select "Admin" to access admin features</small>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-netflix py-2 mb-3" style="min-width: 200px; font-size: 1.1rem;"><i class="fas fa-user-plus me-2"></i>Create Account</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center">
+                        <p style="color: #e0e0e0;" class="mb-0">Already have an account? <a href="/login" style="color: #E50914; text-decoration: none; font-weight: 600;">Sign in</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus, .form-select:focus {
+        background-color: #333;
+        border-color: #E50914;
+        color: white;
+        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+    }
+    .form-control::placeholder, .form-select option {
+        color: #666;
+    }
+    .form-label {
+        font-size: 1rem;
+    }
+</style>
+
+<%- include('../partials/footer') %>

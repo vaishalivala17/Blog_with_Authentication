@@ -1,0 +1,141 @@
+﻿<%- include('../partials/header') %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="profile-card" style="background-color: #1f1f1f; padding: 40px; border-radius: 10px; border: 1px solid #333;">
+                <h2 class="mb-4" style="color: white;"><i class="fas fa-user-circle me-2" style="color: var(--primary-color);"></i>My Profile</h2>
+                
+                <% if (typeof message !== 'undefined' && message) { %>
+                    <div class="alert alert-success" style="background-color: rgba(25, 135, 84, 0.2); border: 1px solid #198754; color: #75b798;">
+                        <i class="fas fa-check-circle me-2"></i><%= message %>
+                    </div>
+                <% } %>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger" style="background-color: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #f8d7da;">
+                        <i class="fas fa-exclamation-circle me-2"></i><%= error %>
+                    </div>
+                <% } %>
+
+                <!-- Profile Image Section -->
+                <div class="text-center mb-4">
+                    <div class="position-relative d-inline-block">
+                        <% if (user.profileImage) { %>
+                            <img src="<%= user.profileImage %>" alt="Profile" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid var(--primary-color);">
+                        <% } else { %>
+                            <div class="rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 3px solid var(--primary-color); margin: 0 auto;">
+                                <i class="fas fa-user fa-3x" style="color: white;"></i>
+                            </div>
+                        <% } %>
+                        <form action="/profile/image" method="POST" enctype="multipart/form-data" class="position-absolute" style="bottom: 0px; right: 0px;">
+                            <input type="file" name="profileImage" id="profileImage" accept="image/*" style="display: none;" onchange="this.form.submit()">
+                            <label for="profileImage" class="btn btn-sm btn-netflix rounded-circle" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </form>
+                    </div>
+                    <p class="mt-2" style="color: #999; font-size: 0.9rem;">Click the camera icon to change your profile photo</p>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label style="color: #e0e0e0;">Username</label>
+                        <p class="fs-5" style="color: white;"><i class="fas fa-user me-2" style="color: var(--primary-color);"></i><%= user.username %></p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label style="color: #e0e0e0;">Email</label>
+                        <p class="fs-5" style="color: white;"><i class="fas fa-envelope me-2" style="color: var(--primary-color);"></i><%= user.email %></p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label style="color: #e0e0e0;">Role</label>
+                        <p>
+                            <% if (user.role === 'admin') { %>
+                                <span class="badge" style="background-color: var(--primary-color);"><i class="fas fa-crown me-1"></i>Admin</span>
+                            <% } else { %>
+                                <span class="badge" style="background-color: #28a745;"><i class="fas fa-user me-1"></i>User</span>
+                            <% } %>
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label style="color: #e0e0e0;">Member Since</label>
+                        <p class="fs-5" style="color: white;"><i class="fas fa-calendar me-2" style="color: var(--primary-color);"></i><%= new Date(user.createdAt).toLocaleDateString() %></p>
+                    </div>
+                </div>
+
+                <hr style="border-color: #333;">
+
+                <!-- Update Profile Form -->
+                <h4 class="mb-3 mt-4" style="color: white;"><i class="fas fa-edit me-2" style="color: var(--primary-color);"></i>Update Profile</h4>
+                <form action="/profile/update" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label" style="color: white;">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required style="background-color: #333; border: 1px solid #444; color: white;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label" style="color: white;">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required style="background-color: #333; border: 1px solid #444; color: white;">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-netflix py-2 px-5" style="min-width: 200px;"><i class="fas fa-save me-2"></i>Update Profile</button>
+                    </div>
+                </form>
+
+                <hr style="border-color: #333;">
+
+                <!-- Change Password Form -->
+                <h4 class="mb-3 mt-4" style="color: white;"><i class="fas fa-lock me-2" style="color: var(--primary-color);"></i>Change Password</h4>
+                <form action="/profile/password" method="POST">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="currentPassword" class="form-label" style="color: white;">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required style="background-color: #333; border: 1px solid #444; color: white;">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="newPassword" class="form-label" style="color: white;">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required minlength="6" style="background-color: #333; border: 1px solid #444; color: white;">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="confirmPassword" class="form-label" style="color: white;">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required minlength="6" style="background-color: #333; border: 1px solid #444; color: white;">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-netflix py-2 px-5" style="min-width: 200px;"><i class="fas fa-key me-2"></i>Change Password</button>
+                    </div>
+                </form>
+
+                <hr style="border-color: #333;">
+
+                <!-- Quick Actions -->
+                <h4 class="mb-3 mt-4" style="color: white;"><i class="fas fa-bolt me-2" style="color: var(--primary-color);"></i>Quick Actions</h4>
+                <div class="text-center">
+                    <a href="/dashboard" class="btn btn-outline-light mx-1 mb-2"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+                    <a href="/blog/create" class="btn btn-outline-light mx-1 mb-2"><i class="fas fa-plus me-1"></i> Create Blog</a>
+                    <a href="/" class="btn btn-outline-light mx-1 mb-2"><i class="fas fa-home me-1"></i> Home</a>
+                    <a href="/logout" class="btn btn-outline-danger mx-1 mb-2"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        color: white !important;
+    }
+    .form-control::placeholder {
+        color: #999 !important;
+    }
+    .form-control:focus {
+        background-color: #333;
+        border-color: var(--primary-color);
+        color: white !important;
+        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+    }
+</style>
+
+<%- include('../partials/footer') %>

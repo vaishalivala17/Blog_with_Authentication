@@ -1,0 +1,98 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card" style="background-color: #1f1f1f; padding: 40px; border-radius: 10px; border: 1px solid #333;">
+                <div class="text-center mb-4">
+                    <h1 class="page-title"><i class="fas fa-plus-circle me-3"></i>Create New Blog</h1>
+                    <p class="page-subtitle">Share your thoughts with the world</p>
+                </div>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger" style="background-color: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #f8d7da;">
+                        <i class="fas fa-exclamation-circle me-2"></i><%= error %>
+                    </div>
+                <% } %>
+
+                <form action="/blog/create" method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="title" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Blog Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter your blog title" required style="background-color: #333; border: 1px solid #444; color: white; height: 50px;">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="category" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Category</label>
+                        <select class="form-select" id="category" name="category" style="background-color: #333; border: 1px solid #444; color: white; height: 50px;">
+                            <option value="General">General</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Food">Food</option>
+                            <option value="Health">Health</option>
+                            <option value="Business">Business</option>
+                            <option value="Entertainment">Entertainment</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="tags" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Tags</label>
+                        <input type="text" class="form-control" id="tags" name="tags" placeholder="Enter tags separated by commas (e.g., javascript, web, coding)" style="background-color: #333; border: 1px solid #444; color: white;">
+                        <small style="color: #e0e0e0;">Separate tags with commas</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="image" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Blog Image</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" style="background-color: #333; border: 1px solid #444; color: white;">
+                        <small style="color: #e0e0e0;">Max file size: 10MB. Supported formats: JPG, PNG, GIF, WebP</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="content" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Blog Content *</label>
+                        <textarea class="form-control" id="content" name="content" rows="12" placeholder="Write your blog content here..." required style="background-color: #333; border: 1px solid #444; color: white; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="status" class="form-label" style="color: white; font-weight: 500; font-size: 1.1rem;">Status</label>
+                        <select class="form-select" id="status" name="status" style="background-color: #333; border: 1px solid #444; color: white; height: 50px;">
+                            <option value="published">Publish Now</option>
+                            <option value="draft">Save as Draft</option>
+                        </select>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-netflix py-2 px-5" style="min-width: 220px; font-size: 1.1rem;"><i class="fas fa-save me-2"></i>Create Blog</button>
+                        <a href="/dashboard" class="btn d-block mt-3" style="color: #e0e0e0; border: 1px solid #444;"><i class="fas fa-times me-2"></i>Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        color: white !important;
+    }
+    .form-control::placeholder {
+        color: #999 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: #333;
+        border-color: #E50914;
+        color: white !important;
+        box-shadow: 0 0 0 0.2rem rgba(229, 9, 20, 0.25);
+    }
+    .form-select option {
+        background-color: #333;
+        color: white;
+    }
+    textarea {
+        min-height: 300px;
+        color: white !important;
+    }
+    .form-label {
+        font-size: 1.1rem;
+    }
+</style>
+
