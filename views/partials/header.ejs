@@ -23,7 +23,9 @@
             --text-muted: #b3b3b3;
             --bs-body-bg: #1f1f1f;
         }
-
+        .btn-outline-light {
+            --bs-btn-active-color: #fff;
+        }   
         * {
             margin: 0;
             padding: 0;
@@ -71,8 +73,17 @@
         }
 
         .nav-link:hover {
-            color: var(--primary-color) !important;
+            color: var(--primary-color) !important;  
             background-color: rgba(229, 9, 20, 0.1);
+        }
+
+        /* Prevent dropdown button hover color change */
+        .dropdown-toggle:hover {
+            color: var(--text-light) !important;
+            background-color: rgba(229, 9, 20, 0.1) !important;
+            padding: 8px 15px !important;
+            border-radius: 5px;
+            margin: 0 5px;
         }
 
         .navbar-toggler {
@@ -124,8 +135,8 @@
         }
 
         .dropdown-item:hover {
-            background-color: var(--primary-color);
-            color: white !important;
+            background-color: rgba(229, 9, 20, 0.1);
+            color: var(--text-light) !important;
         }
 
         /* Custom scrollbar */
@@ -209,6 +220,33 @@
             background-color: white;
             color: black;
         }
+
+        /* Mobile Navbar Fixes */
+        @media (max-width: 991.98px) {
+            .navbar-nav .nav-item .dropdown-toggle:hover,
+            .navbar-nav .nav-item .dropdown-item:hover {
+                color: var(--text-light) !important;
+                background-color: rgba(229, 9, 20, 0.1) !important;
+            }
+            .navbar-nav .nav-item:not(.dropdown) .btn {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+                text-align: left;
+            }
+            .navbar-nav .dropdown-menu {
+                position: static !important;
+                float: none;
+                width: auto;
+                margin-top: 0;
+                background-color: transparent;
+                border: 0;
+                box-shadow: none;
+            }
+            .navbar-nav .dropdown-item {
+                padding-left: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -245,24 +283,19 @@
                 </ul>
                 <ul class="navbar-nav">
                     <% if (typeof user !=='undefined' && user) { %>
-<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <li class="nav-item dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle p-0 border-0 bg-transparent" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="line-height: 1;">
                                 <img src="<%= user.profileImage || '/uploads/blogs/default-avatar.png' %>" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover; border: 2px solid var(--primary-color);">
-                                <span class="ms-1" style="max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <span class="ms-1 d-none d-md-inline" style="max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     <%= user.username %>
                                 </span>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>
-                                        Profile</a></li>
-                                <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-blog me-2"></i> My
-                                        Blogs</a></li>
-                                <li><a class="dropdown-item" href="/blog/create"><i class="fas fa-plus-circle me-2"></i>
-                                        Create Blog</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>
-                                        Logout</a></li>
+                                <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-blog me-2"></i> My Blogs</a></li>
+                                <li><a class="dropdown-item" href="/blog/create"><i class="fas fa-plus-circle me-2"></i> Create Blog</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                             </ul>
                         </li>
                         <% } else { %>
