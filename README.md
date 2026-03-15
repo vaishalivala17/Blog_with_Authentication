@@ -31,7 +31,7 @@ A full-stack Node.js blog platform with authentication, image uploads, and admin
    SESSION_SECRET=your_secret_key
    ```
 4. Run: `npm run dev`
-5. Open: http://localhost:3001
+5. Open: http://localhost:3000
 
 ## 📁 Structure
 ```
