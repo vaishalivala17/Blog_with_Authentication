@@ -46,4 +46,4 @@ Blog_App/
 ```
 
 ## 🤝 Contributing
-Fork, PR welcome!
+Fork the repository on GitHub and submit Pull Requests (PRs) to contribute. Welcome!
