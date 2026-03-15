@@ -147,20 +147,18 @@ const updateProfile = async (req, res) => {
 // Update profile image
 const updateProfileImage = async (req, res) => {
     try {
-        upload.single('profileImage')(req, res, async (err) => {
-            if (err) {
-                return res.redirect('/profile?error=' + encodeURIComponent(err.message));
-            }
-            
-            if (req.file) {
-                await User.findByIdAndUpdate(req.session.user._id, {
-                    profileImage: '/uploads/' + req.file.filename
-                });
-                req.session.user.profileImage = '/uploads/' + req.file.filename;
-            }
-            
-            res.redirect('/profile?message=Profile image updated!');
-        });
+        if (req.fileValidationError) {
+            return res.redirect('/profile?error=' + encodeURIComponent(req.fileValidationError));
+        }
+        
+        if (req.file) {
+            await User.findByIdAndUpdate(req.session.user._id, {
+                profileImage: '/uploads/blogs/' + req.file.filename
+            });
+            req.session.user.profileImage = '/uploads/blogs/' + req.file.filename;
+        }
+        
+        res.redirect('/profile?message=Profile image updated!');
     } catch (error) {
         console.error('Image update error:', error);
         res.redirect('/profile?error=Failed to update image');

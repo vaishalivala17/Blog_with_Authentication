@@ -49,7 +49,6 @@ app.use(session({
 }));
 
 connectDb();
-// check this app coe and set  default icon for image and set button for view, edit and delete button with all post and in all post post-images wa not showing sso set that  and in post set like button because now only one person can like the post  after one person like image unlike button was replace so i want to set this button as when the person like button so  button was change as youtube button and if person want to unlike then click once on button and the post as being unlike so i ant to change this and in dashboard change the colour of font in table of sho all blogs because the colour of font is white so it cannot show properly.
 
 // Static files and uploads directory
 app.use(express.static(path.join(__dirname, 'public')));

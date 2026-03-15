@@ -5,35 +5,49 @@
         <div class="col-lg-8">
             <!-- Blog Image -->
             <div class="blog-image mb-4" style="border-radius: 10px; overflow: hidden;">
-                <img src="<%= blog.image || '/uploads/default-blog.jpg' %>" alt="<%= blog.title %>" style="width: 100%; max-height: 400px; object-fit: cover;">
+                <% if (blog && blog.image) { %>
+                    <img src="<%= blog.image %>" alt="<%= blog.title || 'Blog' %>" style="width: 100%; max-height: 400px; object-fit: cover;">
+                <% } else { %>
+                    <img src="/uploads/default-blog.jpg" alt="Blog" style="width: 100%; max-height: 400px; object-fit: cover;">
+                <% } %>
             </div>
             
             <!-- Blog Title -->
-            <h1 class="mb-3" style="color: white;"><%= blog.title %></h1>
+            <h1 class="mb-3" style="color: white;"><%= blog && blog.title ? blog.title : 'Untitled Blog' %></h1>
             
             <!-- Blog Meta -->
             <div class="d-flex flex-wrap align-items-center gap-3 mb-4 pb-4" style="border-bottom: 1px solid #333;">
+                <% if (blog && blog.author) { %>
                 <div class="d-flex align-items-center">
-                    <img src="<%= blog.author.profileImage || '/uploads/default-avatar.png' %>" alt="<%= blog.author.username %>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    <img src="<%= blog.author.profileImage || '/uploads/default-avatar.png' %>" alt="<%= blog.author.username || 'Author' %>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                     <div>
-                        <strong style="color: white;"><%= blog.author.username %></strong>
-                        <p class="mb-0 small" style="color: #e0e0e0;"><%= new Date(blog.createdAt).toLocaleDateString() %></p>
+                        <strong style="color: white;"><%= blog.author.username || 'Unknown Author' %></strong>
+                        <p class="mb-0 small" style="color: #e0e0e0;"><%= blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : '' %></p>
                     </div>
                 </div>
+                <% } else { %>
+                <div class="d-flex align-items-center">
+                    <img src="/uploads/default-avatar.png" alt="Unknown Author" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    <div>
+                        <strong style="color: white;">Unknown Author</strong>
+                        <p class="mb-0 small" style="color: #e0e0e0;"><%= blog && blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : '' %></p>
+                    </div>
+                </div>
+                <% } %>
                 <div class="d-flex align-items-center gap-3 ms-auto">
-                    <span style="color: #e0e0e0;"><i class="fas fa-eye me-1"></i><%= blog.views %> views</span>
-                    <span style="color: #e0e0e0;"><i class="fas fa-heart me-1"></i><%= blog.likes.length %> likes</span>
-                    <span class="badge" style="background-color: var(--primary-color);"><%= blog.category %></span>
+                    <span style="color: #e0e0e0;"><i class="fas fa-eye me-1"></i><%= blog && blog.views ? blog.views : 0 %> views</span>
+                    <span style="color: #e0e0e0;"><i class="fas fa-heart me-1"></i><%= blog && blog.likes ? blog.likes.length : 0 %> likes</span>
+                    <span class="badge" style="background-color: var(--primary-color);"><%= blog && blog.category ? blog.category : 'General' %></span>
                 </div>
             </div>
             
             <!-- Blog Content -->
             <div class="blog-content mb-5" style="line-height: 1.8; font-size: 16px; color: #e0e0e0;">
-                <%- blog.content.replace(/\n/g, '<br>') %>
+                <%- blog && blog.content ? blog.content.replace(/\n/g, '<br>') : 'No content available' %>
             </div>
             
             <!-- Tags -->
-            <% if (blog.tags && blog.tags.length > 0) { %>
+            <% if (blog && blog.tags && blog.tags.length > 0) { %>
                 <div class="mb-4">
                     <h5 class="mb-2" style="color: white;">Tags:</h5>
                     <% blog.tags.forEach(tag => { %>
@@ -43,18 +57,18 @@
             <% } %>
             
             <!-- Like Button -->
-            <% if (typeof user !== 'undefined' && user) { %>
+            <% if (typeof user !== 'undefined' && user && blog) { %>
                 <form action="/blog/like/<%= blog._id %>" method="POST" class="mb-5">
                     <div class="text-center">
-                        <% const isLiked = blog.likes.includes(user._id); %>
-                        <button type="submit" class="btn py-2 px-4" style="<%= isLiked ? 'background-color: #FF0000; color: white; border: 2px solid #FF0000;' : 'background-color: transparent; color: white; border: 2px solid white;'; %>">
+<% const isLiked = blog.likes && blog.likes.some(like => like.toString() === user._id.toString()); %>
+                        <button type="submit" class="btn py-2 px-4 <%= isLiked ? 'btn-liked' : 'btn-unliked' %>">
                             <% if (isLiked) { %>
-                                <i class="fas fa-play me-2"></i> Liked
+                                <i class="fas fa-heart me-2"></i> Liked
                             <% } else { %>
-                                <i class="fas fa-play me-2"></i> Like
+                                <i class="fas fa-heart me-2"></i> Like
                             <% } %>
                         </button>
-                        <span class="ms-3" style="color: #e0e0e0;"><%= blog.likes.length %> people liked this</span>
+                        <span class="ms-3" style="color: #e0e0e0;"><%= blog.likes ? blog.likes.length : 0 %> people liked this</span>
                     </div>
                 </form>
             <% } else { %>
@@ -67,14 +81,24 @@
             <!-- Author Info -->
             <div class="author-section p-4 rounded" style="background-color: #1f1f1f; border: 1px solid #333;">
                 <h4 class="mb-3" style="color: white;">About the Author</h4>
+                <% if (blog && blog.author) { %>
                 <div class="d-flex align-items-center">
-                    <img src="<%= blog.author.profileImage || '/uploads/default-avatar.png' %>" alt="<%= blog.author.username %>" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    <img src="<%= blog.author.profileImage || '/uploads/default-avatar.png' %>" alt="<%= blog.author.username || 'Author' %>" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
                     <div>
-                        <h5 class="mb-1" style="color: white;"><%= blog.author.username %></h5>
-                        <p class="mb-2" style="color: #e0e0e0;"><%= blog.author.email %></p>
-                        <a href="/search?q=<%= blog.title%>" class="btn btn-sm btn-outline-netflix">View all posts</a>
+                        <h5 class="mb-1" style="color: white;"><%= blog.author.username || 'Unknown Author' %></h5>
+                        <p class="mb-2" style="color: #e0e0e0;"><%= blog.author.email || '' %></p>
+                        <a href="/search?q=<%= blog.title || '' %>" class="btn btn-sm btn-outline-netflix">View all posts</a>
                     </div>
                 </div>
+                <% } else { %>
+                <div class="d-flex align-items-center">
+                    <img src="/uploads/default-avatar.png" alt="Unknown Author" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    <div>
+                        <h5 class="mb-1" style="color: white;">Unknown Author</h5>
+                        <p class="mb-2" style="color: #e0e0e0;">No email available</p>
+                    </div>
+                </div>
+                <% } %>
             </div>
         </div>
         
@@ -85,12 +109,12 @@
                 <h5 class="mb-3" style="color: white;">Search Blogs</h5>
                 <form action="/search" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="q" placeholder="Search..." style="background-color: #333; border: 1px solid #444; color: white;">
+                        <input type="text" class="form-control" name="q" placeholder="Search..." style=" background-color: #333; border: 1px solid #444;">
                         <button type="submit" class="btn btn-netflix"><i class="fas fa-search"></i></button>
                     </div>
                 </form>
             </div>
-            
+          
             <!-- Categories -->
             <div class="categories-box p-4 rounded mb-4" style="background-color: #1f1f1f; border: 1px solid #333;">
                 <h5 class="mb-3" style="color: white;">Categories</h5>
@@ -123,3 +147,4 @@
 </div>
 
 <%- include('../partials/footer') %>
+

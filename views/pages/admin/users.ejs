@@ -86,7 +86,8 @@
                                     <td style="border-color: #333;">
                                         <% if (user._id.toString() !== locals.user._id) { %>
                                             <div class="d-flex gap-2">
-                                                <a href="/search?q=<%= user.username %>" class="btn btn-sm btn-outline-primary" title="View user's blogs"><i class="fas fa-blog"></i></a>
+                                                <a href="/user/<%= user._id %>/blogs" class="btn btn-sm btn-outline-primary" title="View user's blogs"><i class="fas fa-blog"></i></a>
+
                                             </div>
                                         <% } else { %>
                                             <span class="text-muted">-</span>

@@ -10,7 +10,7 @@ const { isAuthenticated, isAdmin, isGuest } = require('../middleware/auth');
 // Configure multer for file uploads (same as in index.js)
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, 'public/uploads/blogs');
+        const uploadPath = path.join(__dirname, '..', 'public/uploads/blogs');
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
         }
@@ -96,4 +96,8 @@ router.get('/admin/dashboard', isAuthenticated, isAdmin, (req, res) => {
 // Admin users management
 router.get('/admin/users', isAuthenticated, isAdmin, authController.getAllUsers);
 
+// User blogs (admin view)
+router.get('/user/:id/blogs', isAuthenticated, isAdmin, blogController.getUserBlogs);
+
 module.exports = router;
+

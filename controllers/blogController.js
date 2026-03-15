@@ -282,6 +282,33 @@ const searchBlogs = async (req, res) => {
     }
 };
 
+// Get user blogs for admin
+const User = require('../models/User');
+const getUserBlogs = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId).select('username profileImage');
+
+        if (!user) {
+            return res.redirect('/admin/users?error=User not found');
+        }
+
+        const blogs = await Blog.find({ author: userId })
+            .populate('author', 'username profileImage')
+            .sort({ createdAt: -1 });
+
+        res.render('pages/dashboard', { 
+            title: `${user.username}'s Blogs`,
+            blogs,
+            isAdmin: req.session.user.role === 'admin',
+            user // Pass user info for header
+        });
+    } catch (error) {
+        console.error('Get user blogs error:', error);
+        res.redirect('/admin/users?error=Failed to load user blogs');
+    }
+};
+
 module.exports = {
     getAllBlogs,
     getBlog,
@@ -293,5 +320,7 @@ module.exports = {
     deleteBlog,
     likeBlog,
     getBlogsByCategory,
-    searchBlogs
+    searchBlogs,
+    getUserBlogs
 };
+
